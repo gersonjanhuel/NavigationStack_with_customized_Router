@@ -9,25 +9,32 @@ import SwiftUI
 
 @main
 struct TrialNavigationStackApp: App {
-    @StateObject var coordinator = Coordinator()
+    @StateObject var router = Router()
     
     
     var body: some Scene {
         WindowGroup {
-            NavigationStack(path: $coordinator.path) {
+            NavigationStack(path: $router.path) {
                 ContentView()
                     .navigationDestination(for: Destination.self) { destination in
-                        // pengen dinamis
-                        ViewFactory.viewForDestination(destination)
+                        // logic to handle destination can be here...
+                        if destination == .fourthPage {
+                            FourthView()
+                        } else {
+                            // or separate it to a separate View Builder class
+                            ViewFactory.viewForDestination(destination)
+                        }
+                        
+                        
                     }
             }
-            .environmentObject(coordinator)
+            .environmentObject(router)
         }
     }
 }
 
 
-class Coordinator: ObservableObject {
+class Router: ObservableObject {
     @Published var path = NavigationPath()
     
     func popToRoot() {
@@ -38,8 +45,9 @@ class Coordinator: ObservableObject {
 
 // custom page
 enum Destination: Hashable {
-    case secondPage
+    case secondPage(CustomData)
     case thirdPage(Int)
+    case fourthPage
 }
 
 class ViewFactory {
@@ -47,9 +55,15 @@ class ViewFactory {
     static func viewForDestination(_ destination: Destination) -> some View {
         switch destination {
         case .secondPage:
-            SecondContentView()
+            SecondView()
         case .thirdPage(let x):
             ThirdView(requireParam: x)
+        case .fourthPage:
+            FourthView()
         }
     }
+}
+
+struct CustomData: Equatable, Hashable {
+    let x: Int = 0
 }

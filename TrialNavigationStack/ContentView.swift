@@ -10,9 +10,9 @@ import SwiftUI
 struct ContentView: View {
     var body: some View {
         VStack {
-            Text("Hello, World!")
+            Text("Hello, 1st Page!")
             
-            NavigationLink("Go to next page", value: Destination.secondPage)
+            NavigationLink("Go to next page", value: Destination.secondPage(CustomData()))
         }
         .padding()
     }
