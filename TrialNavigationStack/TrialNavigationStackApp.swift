@@ -37,6 +37,7 @@ struct TrialNavigationStackApp: App {
 class Router: ObservableObject {
     @Published var path = NavigationPath()
     
+    // example function inside router 
     func popToRoot() {
         path.removeLast(path.count)
     }
