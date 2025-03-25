@@ -8,7 +8,7 @@
 import SwiftUI
 
 struct ThirdView: View {
-    @EnvironmentObject var router: Router
+    @EnvironmentObject var navRouter: NavigationRouter
     
     var requireParam: Int = 0
     
@@ -16,23 +16,30 @@ struct ThirdView: View {
         VStack {
             Text("Page 3 - Passed data: \(requireParam)")
             
+            // Navigate with button
             Button("Go to 4th Page w/ Button") {
-                router.path.append(Destination.fourthPage)
+                navRouter.gotoScreen(screen: Screen.fourthPage)
             }
             .buttonStyle(.borderedProminent)
                 
             
-            NavigationLink(value: Destination.fourthPage) {
+            // Or navigate with Navigation Link
+            NavigationLink(value: Screen.fourthPage) {
                 Text("Go to 4th Page")
             }
             
+            Button("back 1 step") {
+                navRouter.back()
+            }
+            
             Button("back 2 step") {
-                router.path.removeLast(2)
+                // you can do logic with the path here...
+                navRouter.path.removeLast(2)
             }
             .buttonStyle(.borderedProminent)
             
             Button("pop to root") {
-                router.popToRoot()
+                navRouter.popToRoot()
             }
         }
     }

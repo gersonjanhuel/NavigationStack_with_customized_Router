@@ -12,7 +12,8 @@ struct ContentView: View {
         VStack {
             Text("Hello, 1st Page!")
             
-            NavigationLink("Go to next page", value: Destination.secondPage(CustomData()))
+            // navigate using Navigation Link value
+            NavigationLink("Go to next page", value: Screen.secondPage(CustomData()))
         }
         .padding()
     }

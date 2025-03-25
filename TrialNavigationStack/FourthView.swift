@@ -8,8 +8,21 @@
 import SwiftUI
 
 struct FourthView: View {
+    
+    @EnvironmentObject var navRouter: NavigationRouter
+    
     var body: some View {
-        Text("Hello, World!")
+        VStack {
+            Text("Hello, Fourth Page!")
+            
+            Button {
+                navRouter.popToRoot()
+            } label: {
+                Text("Lets go back to root!")
+            }
+
+        }
+        
     }
 }
 

@@ -9,52 +9,58 @@ import SwiftUI
 
 @main
 struct TrialNavigationStackApp: App {
-    @StateObject var router = Router()
     
+    @StateObject var navRouter = NavigationRouter()
     
     var body: some Scene {
         WindowGroup {
-            NavigationStack(path: $router.path) {
+            NavigationStack(path: $navRouter.path) {
                 ContentView()
-                    .navigationDestination(for: Destination.self) { destination in
-                        // logic to handle destination can be here...
-                        if destination == .fourthPage {
+                    .navigationDestination(for: Screen.self) { screen in
+                        
+                        if screen == .fourthPage { // handle destination logic here...
                             FourthView()
                         } else {
-                            // or separate it to a separate View Builder class
-                            ViewFactory.viewForDestination(destination)
+                            // or separate send it View Builder class
+                            NavigationViewFactory.viewForDestination(screen)
                         }
                         
                         
                     }
             }
-            .environmentObject(router)
+            .environmentObject(navRouter)
         }
     }
 }
 
-
-class Router: ObservableObject {
+// this is the object that manage the logic for navigation route and path
+class NavigationRouter: ObservableObject {
     @Published var path = NavigationPath()
     
-    // example function inside router 
+    func gotoScreen(screen: Screen) {
+        path.append(screen)
+    }
+    
+    func back() {
+        path.removeLast()
+    }
+    
     func popToRoot() {
         path.removeLast(path.count)
     }
-    
 }
 
 // custom page
-enum Destination: Hashable {
+enum Screen: Hashable {
     case secondPage(CustomData)
     case thirdPage(Int)
     case fourthPage
 }
 
-class ViewFactory {
+class NavigationViewFactory {
     @ViewBuilder
-    static func viewForDestination(_ destination: Destination) -> some View {
-        switch destination {
+    static func viewForDestination(_ screen: Screen) -> some View {
+        switch screen {
         case .secondPage:
             SecondView()
         case .thirdPage(let x):
